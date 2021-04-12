@@ -1,0 +1,15 @@
+.product-container{
+    display: flex;
+    border-bottom: 1px solid lightgray;
+}
+.product-details h4{
+    color: blue;
+}
+.product-details{
+    padding: 2px;
+    margin-bottom: 5px;
+}
+.cart-btn{
+    background-color: goldenrod;
+    font-size: large;
+}
