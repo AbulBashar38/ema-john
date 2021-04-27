@@ -31,7 +31,7 @@ function App() {
           <Route path='/product/:productKey'>
             <ProductDetails></ProductDetails>
           </Route>
-          <Route path='shipment'>
+          <Route path='/shipment'>
             <Shipment></Shipment>
           </Route>
           <Route path='/login'>
