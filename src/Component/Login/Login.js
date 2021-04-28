@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { useHistory, useLocation } from 'react-router';
+import { UserContext } from '../../App';
 import './Login.css'
 import { initializeConfig, signInForEmail, signInForFacebook, signInForGoogle, signUpForEmail } from './LoginManager'
 
-
 initializeConfig()
+
 const Login = () => {
 
     const [user, setUser] = useState({
@@ -14,57 +16,83 @@ const Login = () => {
         error: '',
     })
 
+    const [loggedInUser, setLoggedInUser]= useContext(UserContext);
+
     const [newUser, setNewUser] = useState(false);
 
+    const history = useHistory();
+    const location = useLocation();
+    let { from } = location.state || { from: { pathname: "/" } };
+    
     const authByEmail = (e) => {
+
         if (newUser && user.email && user.password) {
             signUpForEmail(user.name, user.email, user.password)
                 .then(res => {
                     setUser(res)
+                    setLoggedInUser(res)
+                    history.replace(from);
                 })
         }
+
         if (!newUser && user.email && user.password) {
             signInForEmail(user.email, user.password)
                 .then(res => {
                     setUser(res)
+                    setLoggedInUser(res)
+                    history.replace(from);
                 })
         }
         e.preventDefault()
     }
+
     const emailPassChecker = (e) => {
         let isValid;
+
         if (e.target.name === 'email') {
             const isEmailValid = /\S+@\S+\.\S+/.test(e.target.value);
             isValid = isEmailValid;
         }
+
         if (e.target.name === 'password') {
 
             const validLength = e.target.value.length > 6;
             const characterValid = /\d{1}/.test(e.target.value)
             isValid = validLength && characterValid;
         }
+
         if (e.target.name === 'name') {
+
             const name = e.target.value.length > 0;
-            isValid = name
+            isValid = name;
         }
+
         if (isValid) {
 
             const userInfo = { ...user };
             userInfo[e.target.name] = e.target.value;
-            setUser(userInfo)
+            setUser(userInfo);
         }
     }
 
     const googleSignIn = () => {
         signInForGoogle()
             .then(res => {
-                setUser(res)
+
+                setUser(res);
+                setLoggedInUser(res);
+                history.replace(from);
+
             })
     }
     const facebookSignIn = () =>{
         signInForFacebook()
         .then(res=>{
-            setUser(res)
+
+            setUser(res);
+            setLoggedInUser(res);
+            history.replace(from);
+
         })
     }
     return (

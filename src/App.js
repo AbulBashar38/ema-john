@@ -12,28 +12,32 @@ import Inventory from './Component/Inventory/Inventory';
 import ProductDetails from './Component/ProductDetails/ProductDetails';
 import Shipment from './Component/Shipment/Shipment';
 import Login from './Component/Login/Login';
+import { createContext, useState } from 'react';
+import PrivateRoute from './Component/PrivateRoute/PrivateRoute';
 
+export const UserContext = createContext()
 function App() {
+  const [loggedInUser, setLoggedInUser]= useState({});
   return (
-    <div >
+    <UserContext.Provider value={[loggedInUser,setLoggedInUser]} >
       <Router>
       <Header></Header>
         <Switch>
           <Route path='/shop'>
             <Shop></Shop>
           </Route>
-          <Route path='/manage'>
+          <PrivateRoute path='/manage'>
             <Inventory></Inventory>
-          </Route>
+          </PrivateRoute>
           <Route path='/order'>
             <OrderReview></OrderReview>
           </Route>
           <Route path='/product/:productKey'>
             <ProductDetails></ProductDetails>
           </Route>
-          <Route path='/shipment'>
+          <PrivateRoute path='/shipment'>
             <Shipment></Shipment>
-          </Route>
+          </PrivateRoute>
           <Route path='/login'>
             <Login></Login>
           </Route>
@@ -46,7 +50,7 @@ function App() {
         </Switch>
       </Router>
       
-    </div>
+    </UserContext.Provider>
   );
 }
 
