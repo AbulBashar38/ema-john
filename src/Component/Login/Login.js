@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import './Login.css'
-import { initializeConfig, signInForEmail, signInForGoogle, signUpForEmail } from './LoginManager'
+import { initializeConfig, signInForEmail, signInForFacebook, signInForGoogle, signUpForEmail } from './LoginManager'
 
 
 initializeConfig()
@@ -61,6 +61,12 @@ const Login = () => {
                 setUser(res)
             })
     }
+    const facebookSignIn = () =>{
+        signInForFacebook()
+        .then(res=>{
+            setUser(res)
+        })
+    }
     return (
         <Container className="body">
             <Form className="from">
@@ -93,7 +99,7 @@ const Login = () => {
                             <Button onClick={googleSignIn} variant="success">With Google</Button>
                         </Col>
                         <Col md={6}>
-                            <Button variant="info">With Facebook</Button>
+                            <Button onClick={facebookSignIn} variant="info">With Facebook</Button>
                         </Col>
                     </Row>
                 </Form.Group>

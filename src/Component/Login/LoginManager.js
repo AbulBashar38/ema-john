@@ -54,6 +54,24 @@ export const signInForEmail = (email, password) => {
         });
 }
 
+export const signInForFacebook =()=>{
+    var FbProvider = new firebase.auth.FacebookAuthProvider();
+    return firebase.auth().signInWithPopup(FbProvider)
+  .then(res => {
+    var credential = res.credential;
+    var user = res.user;
+    var accessToken = credential.accessToken;
+    return user
+    
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    var email = error.email;
+    var credential = error.credential;
+  });
+}
+
 const updateUserName = (name) => {
     const user = firebase.auth().currentUser;
     user.updateProfile({

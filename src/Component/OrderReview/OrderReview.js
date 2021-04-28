@@ -4,9 +4,11 @@ import { Button } from '@material-ui/core';
 import { getDatabaseCart, removeFromDatabaseCart } from '../../utilities/databaseManager';
 import Cart from '../Cart/Cart';
 import ReviewData from '../RivewData/ReviewData';
+import { useHistory } from 'react-router';
 
 const OrderReview = () => {
     const [showProducts, setShowProducts] = useState([])
+    const history = useHistory()
     const removeProduct = productKey => {
         const newProduct = showProducts.filter(product => product.key !== productKey)
         setShowProducts(newProduct);
@@ -22,6 +24,9 @@ const OrderReview = () => {
         })
         setShowProducts(ReviewProduct)
     }, [])
+    const handelCheckout=()=>{
+        history.push('/shipment')
+    }
     return (
         <div>
             <h1>Your order {showProducts.length}</h1>
@@ -33,7 +38,7 @@ const OrderReview = () => {
                 </div>
                 <div>
                     <Cart cart={showProducts}>
-                    <Button variant="contained" color="secondary" size="large">Checkout</Button>
+                    <Button onClick={handelCheckout} variant="contained" color="secondary" size="large">Checkout</Button>
                     </Cart>
                 </div>
             </div>
