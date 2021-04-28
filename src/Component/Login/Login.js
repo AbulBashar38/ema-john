@@ -14,16 +14,17 @@ const Login = () => {
         email: '',
         password: '',
         error: '',
+
     })
 
-    const [loggedInUser, setLoggedInUser]= useContext(UserContext);
+    const [loggedInUser, setLoggedInUser] = useContext(UserContext);
 
     const [newUser, setNewUser] = useState(false);
 
     const history = useHistory();
     const location = useLocation();
     let { from } = location.state || { from: { pathname: "/" } };
-    
+
     const authByEmail = (e) => {
 
         if (newUser && user.email && user.password) {
@@ -31,7 +32,9 @@ const Login = () => {
                 .then(res => {
                     setUser(res)
                     setLoggedInUser(res)
-                    history.replace(from);
+                    if (res.isSignIn) {
+                        history.replace(from);
+                    }
                 })
         }
 
@@ -40,7 +43,9 @@ const Login = () => {
                 .then(res => {
                     setUser(res)
                     setLoggedInUser(res)
-                    history.replace(from);
+                    if (res.isSignIn) {
+                        history.replace(from);
+                    }
                 })
         }
         e.preventDefault()
@@ -78,22 +83,24 @@ const Login = () => {
     const googleSignIn = () => {
         signInForGoogle()
             .then(res => {
+                setUser(res);
+                setLoggedInUser(res);
+                if (res.isSignIn) {
+                    history.replace(from);
+                }
+            })
+    }
+    const facebookSignIn = () => {
+        signInForFacebook()
+            .then(res => {
 
                 setUser(res);
                 setLoggedInUser(res);
-                history.replace(from);
+                if (res.isSignIn) {
+                    history.replace(from);
+                }
 
             })
-    }
-    const facebookSignIn = () =>{
-        signInForFacebook()
-        .then(res=>{
-
-            setUser(res);
-            setLoggedInUser(res);
-            history.replace(from);
-
-        })
     }
     return (
         <Container className="body">
@@ -117,6 +124,7 @@ const Login = () => {
                     <Form.Control name='password' type="password" onBlur={emailPassChecker} placeholder="Password" required />
                 </Form.Group>
                 <Form.Group>
+                    <p style={{ color: 'red' }}>{user.error}</p>
                     <Button onClick={authByEmail} variant="primary" type="submit" block>
                         {newUser ? 'Sign Up' : 'Sign In'}
                     </Button>
