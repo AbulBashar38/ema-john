@@ -31,10 +31,10 @@ const ReviewData = (props) => {
         <Card className={classes.root} style={{width:'100%', marginTop:"50px"}}>
       <CardContent>
         
-        <Typography style={{color:'blue'}} variant="h5" component="h2">
+        <Typography style={{color:'blue'}} variant="h5">
           {name}
         </Typography>
-        <Typography variant="h5" component="p">
+        <Typography variant="h5">
           Quantity: {quantity}
           <p>price: ${price}</p>
         </Typography>

@@ -24,7 +24,7 @@ const Login = () => {
     const history = useHistory();
     const location = useLocation();
     let { from } = location.state || { from: { pathname: "/" } };
-
+    console.log(location);
     const authByEmail = (e) => {
 
         if (newUser && user.email && user.password) {

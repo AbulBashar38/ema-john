@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import fakeData from '../../fakeData';
 import { Button } from '@material-ui/core';
 import { getDatabaseCart, removeFromDatabaseCart } from '../../utilities/databaseManager';
 import Cart from '../Cart/Cart';
@@ -17,16 +16,28 @@ const OrderReview = () => {
     useEffect(() => {
         const getKeysAndValue = getDatabaseCart();
         const keys = Object.keys(getKeysAndValue);
-        const ReviewProduct = keys.map(key => {
-            const matchProduct = fakeData.find(product => product.key === key)
-            matchProduct.quantity = getKeysAndValue[key]
-            return matchProduct;
+        let mounted = true;
+        
+        fetch('https://infinite-peak-87937.herokuapp.com/review',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify(keys)
         })
-        setShowProducts(ReviewProduct)
+        .then(res=>res.json())
+        .then(result=>{
+            if (mounted) {
+                setShowProducts(result)
+            }
+            return null;
+        })
+        return () => mounted = false;
     }, [])
     const handelCheckout=()=>{
         history.push('/shipment')
     }
+    
     return (
         <div>
             <h1>Your order {showProducts.length}</h1>
